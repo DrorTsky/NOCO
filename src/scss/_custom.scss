@@ -1,0 +1,82 @@
+// Here you can add other styles
+.buttons_inside_contract_list {
+  margin-right: 1%;
+  width: 40%;
+}
+
+.footer_contract_list_element {
+  width: 100%;
+}
+
+.font_size_badge {
+  font-size: "12px";
+}
+// .close_icon {
+//   float: right;
+//   padding-left: 1em;
+// }
+
+.friend_button {
+  // text-align: center;
+  // width: 280%;
+  position: inherit;
+  min-width: 270px;
+  margin-bottom: 5px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.align_center {
+  text-align: center;
+}
+
+.right_most {
+  position: relative;
+  display: flex;
+  // align-self: flex-start;
+}
+
+.scrollable {
+  overflow-y: auto;
+}
+
+.green_text {
+  color: green;
+}
+.red_text {
+  color: red;
+}
+
+.card_width {
+  width: 95%;
+  padding-right: 2.5px;
+  padding-left: 2.5px;
+  text-align: center;
+}
+.card_button_width {
+  width: 95%;
+  text-align: center;
+}
+
+.card_body_items_width {
+  padding: 5%;
+}
+
+.selected {
+  border: 2px solid rgb(0, 0, 0);
+}
+
+.max_height {
+  max-height: 430px;
+}
+
+.group_item_padding {
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+}
