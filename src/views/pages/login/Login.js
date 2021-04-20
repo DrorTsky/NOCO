@@ -109,7 +109,8 @@ export class Login extends Component {
                               },
                             }}
                           >
-                            Not registered?
+                            Not
+                            {/* Not registered? */}
                           </CButton>
                         </CCol>
                       </CRow>
