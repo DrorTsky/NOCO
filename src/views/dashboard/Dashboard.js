@@ -597,28 +597,36 @@ export class Dashboard extends Component {
       this.state.playerTwo
     );
 
-    makeBatchRequest([
-      // remove both of the exchanges in a batch request.
-      this.state.profile.methods.removeContracts().send,
-      friendsProfile.methods.removeContracts().send,
-    ]);
-    function makeBatchRequest(calls) {
-      let batch = new web3.BatchRequest();
+    this.state.profile.methods.removeContracts().send({
+      from: accounts[0],
+      gas: "2000000",
+    });
+    friendsProfile.methods.removeContracts().send({
+      from: accounts[0],
+      gas: "2000000",
+    });
+    //         makeBatchRequest([
+    //           // remove both of the exchanges in a batch request.
+    //           this.state.profile.methods.removeContracts().send,
+    //           friendsProfile.methods.removeContracts().send,
+    //         ]);
+    // function makeBatchRequest(calls) {
+    //   let batch = new web3.BatchRequest();
 
-      calls.map((call) => {
-        return new Promise((res, rej) => {
-          let req = call.request(
-            { from: accounts[0], gas: "2000000" },
-            (err, data) => {
-              if (err) rej(err);
-              else res(data);
-            }
-          );
-          batch.add(req);
-        });
-      });
-      batch.execute();
-    }
+    //   calls.map((call) => {
+    //     return new Promise((res, rej) => {
+    //       let req = call.request(
+    //         { from: accounts[0], gas: "2000000" },
+    //         (err, data) => {
+    //           if (err) rej(err);
+    //           else res(data);
+    //         }
+    //       );
+    //       batch.add(req);
+    //     });
+    //   });
+    //   batch.execute();
+    // }
   };
 
   // *****************************************************
@@ -652,9 +660,6 @@ export class Dashboard extends Component {
               myName={this.props.name}
             />
           </CCol>
-        </CRow>
-        <CRow>
-          <h1>test</h1>
         </CRow>
         {/* <CRow>
           <CCol xs="4" md="8" xl="8">
@@ -851,7 +856,7 @@ export class Dashboard extends Component {
             </CCard>
           </CCol>
         </CRow> */}
-        {/* <CRow>
+        <CRow>
           <CCol xs="12" md="4" xl="4">
             <CCard>
               <CCardHeader>Contracts</CCardHeader>
@@ -948,7 +953,7 @@ export class Dashboard extends Component {
               </CCardFooter>
             </CCard>
           </CCol>
-        </CRow> */}
+        </CRow>
       </>
     );
   }
