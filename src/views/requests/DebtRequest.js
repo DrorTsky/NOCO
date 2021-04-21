@@ -150,13 +150,13 @@ export class DebtRequest extends Component {
 
     // We call this method in order to remove our exchange on the profile (solidity)
     // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
-    this.props.profile.methods.confirmDebtRequest(this.props.index).send({
+    await this.props.profile.methods.confirmDebtRequest(this.props.index).send({
       from: accounts[0],
       gas: "2000000",
     });
     // We call this method in order to remove friend's exchange (solidity method)
     // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
-    friendsProfile.methods
+    await friendsProfile.methods
       .confirmDebtRequestNotRestricted(friendsExchangeIndex, newContractAddress)
       .send({
         from: accounts[0],
