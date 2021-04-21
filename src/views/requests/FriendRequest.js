@@ -50,35 +50,47 @@ export class FriendRequest extends Component {
       }
     }
 
-    makeBatchRequest([
-      // add both of the exchanges in a batch request.
-
-      // In our frontend the user will choose the correct request, here I test it with 0 as there is only one request
-      this.props.profile.methods.confirmFriendRequest(
-        this.props.index,
-        this.props.sourceName
-      ).send,
-      friendsProfile.methods.confirmFriendRequestNotRestricted(
-        friendRequestIndex
-      ).send,
-    ]);
-    function makeBatchRequest(calls) {
-      let batch = new web3.BatchRequest();
-
-      calls.map((call) => {
-        return new Promise((res, rej) => {
-          let req = call.request(
-            { from: accounts[0], gas: "1000000" },
-            (err, data) => {
-              if (err) rej(err);
-              else res(data);
-            }
-          );
-          batch.add(req);
-        });
+    this.props.profile.methods
+      .confirmFriendRequest(this.props.index, this.props.sourceName)
+      .send({
+        from: accounts[0],
+        gas: "1000000",
       });
-      batch.execute();
-    }
+    friendsProfile.methods
+      .confirmFriendRequestNotRestricted(friendRequestIndex)
+      .send({
+        from: accounts[0],
+        gas: "1000000",
+      });
+    // makeBatchRequest([
+    //   // add both of the exchanges in a batch request.
+
+    //   // In our frontend the user will choose the correct request, here I test it with 0 as there is only one request
+    //   this.props.profile.methods.confirmFriendRequest(
+    //     this.props.index,
+    //     this.props.sourceName
+    //   ).send,
+    //   friendsProfile.methods.confirmFriendRequestNotRestricted(
+    //     friendRequestIndex
+    //   ).send,
+    // ]);
+    // function makeBatchRequest(calls) {
+    //   let batch = new web3.BatchRequest();
+
+    //   calls.map((call) => {
+    //     return new Promise((res, rej) => {
+    //       let req = call.request(
+    //         { from: accounts[0], gas: "1000000" },
+    //         (err, data) => {
+    //           if (err) rej(err);
+    //           else res(data);
+    //         }
+    //       );
+    //       batch.add(req);
+    //     });
+    //   });
+    //   batch.execute();
+    // }
   }
 
   declineFriendRequest = async (event) => {
@@ -113,31 +125,39 @@ export class FriendRequest extends Component {
         }
       }
 
+      friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
+        from: accounts[0],
+        gas: "2000000",
+      });
+      this.props.profile.methods.removeExchange(this.props.index).send({
+        from: accounts[0],
+        gas: "2000000",
+      });
       // BATCH
       // if (friendsExchangeIndex !== -1) {
-      makeBatchRequest([
-        // remove both of the exchanges in a batch request.
-        friendsProfile.methods.removeExchange(friendsExchangeIndex).send,
-        this.props.profile.methods.removeExchange(this.props.index).send,
-      ]);
-      // }
-      function makeBatchRequest(calls) {
-        let batch = new web3.BatchRequest();
+      // makeBatchRequest([
+      //   // remove both of the exchanges in a batch request.
+      //   friendsProfile.methods.removeExchange(friendsExchangeIndex).send,
+      //   this.props.profile.methods.removeExchange(this.props.index).send,
+      // ]);
+      // // }
+      // function makeBatchRequest(calls) {
+      //   let batch = new web3.BatchRequest();
 
-        calls.map((call) => {
-          return new Promise((res, rej) => {
-            let req = call.request(
-              { from: accounts[0], gas: "2000000" },
-              (err, data) => {
-                if (err) rej(err);
-                else res(data);
-              }
-            );
-            batch.add(req);
-          });
-        });
-        batch.execute();
-      }
+      //   calls.map((call) => {
+      //     return new Promise((res, rej) => {
+      //       let req = call.request(
+      //         { from: accounts[0], gas: "2000000" },
+      //         (err, data) => {
+      //           if (err) rej(err);
+      //           else res(data);
+      //         }
+      //       );
+      //       batch.add(req);
+      //     });
+      //   });
+      //   batch.execute();
+      // }
     }
   };
 

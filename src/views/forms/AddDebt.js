@@ -52,41 +52,65 @@ export class AddDebt extends Component {
       this.props.friendAddress
     );
 
-    makeBatchRequest([
-      // add both of the exchanges in a batch request.
-      // the difference: addDebtRequest(destination, same other args), addDebtRequestNotRestricted(source, same other args)
-      this.props.profile.methods.addDebtRequest(
+    this.props.profile.methods
+      .addDebtRequest(
         this.props.friendAddress,
         this.props.playerOne,
         this.state.providedAmount,
         this.props.friendAddress
-      ).send,
-      friendsProfile.methods.addDebtRequestNotRestricted(
+      )
+      .send({
+        from: accounts[0],
+        gas: "1000000",
+      });
+
+    friendsProfile.methods
+      .addDebtRequestNotRestricted(
         this.props.playerOne,
         this.props.playerOne,
         this.state.providedAmount,
         this.props.friendAddress
-      ).send,
-    ]);
-
-    function makeBatchRequest(calls) {
-      let batch = new web3.BatchRequest();
-
-      // let promises = calls.map(call => {
-      calls.map((call) => {
-        return new Promise((res, rej) => {
-          let req = call.request(
-            { from: accounts[0], gas: "1000000" },
-            (err, data) => {
-              if (err) rej(err);
-              else res(data);
-            }
-          );
-          batch.add(req);
-        });
+      )
+      .send({
+        from: accounts[0],
+        gas: "1000000",
       });
-      batch.execute();
-    }
+
+    // makeBatchRequest([
+    //   // add both of the exchanges in a batch request.
+    //   // the difference: addDebtRequest(destination, same other args), addDebtRequestNotRestricted(source, same other args)
+    //   this.props.profile.methods.addDebtRequest(
+    //     this.props.friendAddress,
+    //     this.props.playerOne,
+    //     this.state.providedAmount,
+    //     this.props.friendAddress
+    //   ).send,
+    //   friendsProfile.methods.addDebtRequestNotRestricted(
+    //     this.props.playerOne,
+    //     this.props.playerOne,
+    //     this.state.providedAmount,
+    //     this.props.friendAddress
+    //   ).send,
+    // ]);
+
+    // function makeBatchRequest(calls) {
+    //   let batch = new web3.BatchRequest();
+
+    //   // let promises = calls.map(call => {
+    //   calls.map((call) => {
+    //     return new Promise((res, rej) => {
+    //       let req = call.request(
+    //         { from: accounts[0], gas: "1000000" },
+    //         (err, data) => {
+    //           if (err) rej(err);
+    //           else res(data);
+    //         }
+    //       );
+    //       batch.add(req);
+    //     });
+    //   });
+    //   batch.execute();
+    // }
 
     this.props.handleClose();
   };

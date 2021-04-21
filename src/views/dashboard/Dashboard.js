@@ -753,8 +753,7 @@ export class Dashboard extends Component {
                         <th>Friends Name</th>
                       </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                   </table>
                 </div>
               </CCardBody>
@@ -778,8 +777,8 @@ export class Dashboard extends Component {
               </CCardFooter>
             </CCard>
           </CCol>
-        </CRow> */}
-        {/* <CRow>
+        </CRow>
+        <CRow>
           <CCol xs="12" sm="4">
             <AddDebt
               playerOne={this.state.playerOne}
@@ -855,7 +854,7 @@ export class Dashboard extends Component {
               </CCardBody>
             </CCard>
           </CCol>
-        </CRow> */}
+        </CRow>
         <CRow>
           <CCol xs="12" md="4" xl="4">
             <CCard>
@@ -953,7 +952,7 @@ export class Dashboard extends Component {
               </CCardFooter>
             </CCard>
           </CCol>
-        </CRow>
+        </CRow> */}
       </>
     );
   }

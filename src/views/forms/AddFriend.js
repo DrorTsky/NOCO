@@ -111,31 +111,46 @@ export class AddFriend extends Component {
     const friendsName = friend.username;
     console.log(`friends name: ${friendsName}`);
     console.log(`my name: ${this.props.name}`);
-    makeBatchRequest([
-      // add both of the exchanges in a batch request.
-      this.state.profile.methods.addFriendRequest(friendsAddress, friendsName)
-        .send,
-      friendsProfile.methods.addFriendRequestNotRestricted(
-        this.state.address,
-        this.props.name
-      ).send,
-    ]);
-    function makeBatchRequest(calls) {
-      let batch = new web3.BatchRequest();
-      calls.map((call) => {
-        return new Promise((res, rej) => {
-          let req = call.request(
-            { from: accounts[0], gas: "1000000" },
-            (err, data) => {
-              if (err) rej(err);
-              else res(data);
-            }
-          );
-          batch.add(req);
-        });
+
+    this.state.profile.methods
+      .addFriendRequest(friendsAddress, friendsName)
+      .send({
+        from: accounts[0],
+        gas: "1000000",
       });
-      batch.execute();
-    }
+    friendsProfile.methods
+      .addFriendRequestNotRestricted(this.state.address, this.props.name)
+      .send({
+        from: accounts[0],
+        gas: "1000000",
+      });
+    //     makeBatchRequest([
+    //       // add both of the exchanges in a batch request.
+    //       this.state.profile.methods.addFriendRequest(
+    //         friendsAddress,
+    //         friendsName
+    //       ).send,
+    //       friendsProfile.methods.addFriendRequestNotRestricted(
+    //         this.state.address,
+    //         this.props.name
+    //       ).send,
+    //     ]);
+    // function makeBatchRequest(calls) {
+    //   let batch = new web3.BatchRequest();
+    //   calls.map((call) => {
+    //     return new Promise((res, rej) => {
+    //       let req = call.request(
+    //         { from: accounts[0], gas: "1000000" },
+    //         (err, data) => {
+    //           if (err) rej(err);
+    //           else res(data);
+    //         }
+    //       );
+    //       batch.add(req);
+    //     });
+    //   });
+    //   batch.execute();
+    // }
   };
 
   // *****************************************************

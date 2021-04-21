@@ -34,6 +34,7 @@ export class Register extends Component {
     this.deployAProfileContract = this.deployAProfileContract.bind(this);
     this.deploy = this.deploy.bind(this);
   }
+
   onSubmitRegister = async () => {
     console.log("in register");
     this.setState({
@@ -46,11 +47,15 @@ export class Register extends Component {
       isDeploying: false,
     });
   };
+
   deploy = async () => {
     console.log(this.state.username);
     const newContract = await this.deployAProfileContract(this.state.username);
     console.log("deployed");
     console.log("creating user");
+    console.log(
+      `pn: ${this.state.phoneNumber}, name:${this.state.username}, address:${newContract.options.address}`
+    );
     await this.props.location.registerProps.writeUserData(
       this.state.phoneNumber,
       this.state.username,

@@ -94,10 +94,10 @@ export class RotationRequest extends Component {
   // MEDIATORS ACCEPT
   //********************************************************
   checkIfContractExists = async (profile, debtorsAddress, creditorsAddress) => {
-    // console.log(
-    //   `debtors address: ${debtorsAddress}, creditors address: ${creditorsAddress}`
-    // );
-    // console.log(profile);
+    console.log(
+      `debtors address: ${debtorsAddress}, creditors address: ${creditorsAddress}`
+    );
+    console.log(profile);
     let contracts = await profile.methods.getContracts().call();
     // console.log(`contract length: ${contracts.length}`);
     // console.log(contracts);
@@ -112,20 +112,19 @@ export class RotationRequest extends Component {
       // console.log(`creditors name: ${creditorName}`);
       let debtorName = await tempC.methods.getCurrentDebtorAddress().call();
       // console.log(`debtors name: ${debtorName}`);
+      let participants = [debtorsAddress, creditorsAddress];
       if (
-        creditorName === debtorsAddress ||
-        creditorName === creditorsAddress
+        participants.includes(creditorName) &&
+        participants.includes(debtorName)
       ) {
-        if (debtorName === debtorsAddress || debtorName === creditorsAddress) {
-          // console.log(`found contract: ${tempC}`);
-          return tempC;
-        }
+        return tempC;
       }
       // console.log(`creditor: ${creditorName}, debtor:${debtorName}`);
     }
     // console.log("false");
     return undefined;
   };
+
   mediatorsFinalAccept = async () => {
     let accounts = await web3.eth.getAccounts();
     // get profiles
@@ -143,9 +142,11 @@ export class RotationRequest extends Component {
     let debtorsIndex = await this.findParticipantsExchangeIndex(
       this.props.exchange.debtRotation.debtor
     );
-    // console.log(`debtors index: ${debtorsIndex}`);
     let creditorsIndex = await this.findParticipantsExchangeIndex(
       this.props.exchange.debtRotation.creditor
+    );
+    console.log(
+      `creditors index: ${creditorsIndex} debtors index: ${debtorsIndex}`
     );
     // console.log(`creditors index: ${creditorsIndex}`);
     // check if debtor has a binary contract with creditor
@@ -154,6 +155,7 @@ export class RotationRequest extends Component {
       this.props.exchange.debtRotation.debtor,
       this.props.exchange.debtRotation.creditor
     );
+    console.log(isContract);
     // if not, create one
     if (isContract === undefined) {
       // console.log(`no contract, creating one`);
@@ -173,10 +175,12 @@ export class RotationRequest extends Component {
         this.props.exchange.debtRotation.debtor,
         this.props.exchange.debtRotation.creditor
       );
+      console.log("contract created");
+      console.log(isContract);
       // console.log(`created a contract: ${isContract}`);
     } else {
       //transfer debt between creditor and debtor
-      // console.log(`contract already exists: ${isContract}`);
+      console.log(`contract already exists: ${isContract}`);
       await isContract.methods
         .addTransaction(
           this.props.exchange.debtRotation.debtor,
@@ -187,7 +191,7 @@ export class RotationRequest extends Component {
           from: accounts[0],
           gas: "2000000",
         });
-      // console.log(`transaction added`);
+      console.log(`transaction added`);
     }
     //transfer debt between debtor and mediator - debtor transfers to mediator "closing" the debt
     let debtorMediatorContract = await this.checkIfContractExists(
@@ -195,7 +199,7 @@ export class RotationRequest extends Component {
       this.props.exchange.debtRotation.mediator,
       this.props.exchange.debtRotation.debtor
     );
-    // console.log(`mediator - debtor contract: ${debtorMediatorContract}`);
+    console.log(`mediator - debtor contract: ${debtorMediatorContract}`);
     await debtorMediatorContract.methods
       .addTransaction(
         this.props.exchange.debtRotation.mediator,
@@ -206,7 +210,7 @@ export class RotationRequest extends Component {
         from: accounts[0],
         gas: "2000000",
       });
-    // console.log(`mediator - debtor contract: transferred`);
+    console.log(`mediator - debtor contract: transferred`);
 
     // transfer debt between mediator and creditor
     let mediatorCreditorContract = await this.checkIfContractExists(
@@ -214,18 +218,18 @@ export class RotationRequest extends Component {
       this.props.exchange.debtRotation.creditor,
       this.props.exchange.debtRotation.mediator
     );
-    // console.log(`mediator - creditor contract: ${mediatorCreditorContract}`);
+    console.log(`mediator - creditor contract: ${mediatorCreditorContract}`);
     await mediatorCreditorContract.methods
       .addTransaction(
-        this.props.exchange.debtRotation.mediator,
+        this.props.exchange.debtRotation.creditor,
         this.props.exchange.debtRotation.amount,
-        this.props.exchange.debtRotation.creditor
+        this.props.exchange.debtRotation.mediator
       )
       .send({
         from: accounts[0],
         gas: "2000000",
       });
-    // console.log(`mediator - creditor contract: transferred`);
+    console.log(`mediator - creditor contract: transferred`);
     // console.log(isContract._address);
     //remove rotation exchanges
     await this.props.profile.methods
@@ -370,13 +374,23 @@ export class RotationRequest extends Component {
             }
           }
         }
-        forBatchRequests.push(
-          friendsProfile.methods.removeExchange(friendsExchangeIndex).send
-        );
+
+        friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
+          from: accounts[0],
+          gas: "3000000",
+        });
+
+        // forBatchRequests.push(
+        //   friendsProfile.methods.removeExchange(friendsExchangeIndex).send
+        // );
       }
-      forBatchRequests.push(
-        this.props.profile.methods.removeExchange(this.props.index).send
-      );
+      this.props.profile.methods.removeExchange(this.props.index).send({
+        from: accounts[0],
+        gas: "3000000",
+      });
+      // forBatchRequests.push(
+      //   this.props.profile.methods.removeExchange(this.props.index).send
+      // );
 
       // BATCH
       // if (friendsExchangeIndex !== -1) {

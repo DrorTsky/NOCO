@@ -41,31 +41,47 @@ export class DebtRequest extends Component {
 
   confirmDebtRequest = async (event) => {
     event.preventDefault();
-
+    console.log("in confirm");
     // Getting accounts list
     const accounts = await web3.eth.getAccounts();
 
     let myContracts = await this.props.profile.methods.getContracts().call();
+    console.log("my contracts broken:");
+    console.log(myContracts);
 
-    let existedContractAddress; // if a contract will be deployed, we will use this variable. Otherwise, we will use deployedContractAddress
     let deployedContractAddress;
     let contractExisted = false;
 
-    for (var i = 0; i < myContracts.length; i++) {
+    for (var index = 0; index < myContracts.length; index++) {
       // in this for loop we try to find if a contract exist, or we should create one
       let contract = await this.props.profile.methods
-        .getContractsByIndex(this.props.index)
+        .getContractsByIndex(index)
         .call();
+      // let contract = await this.props.profile.methods
+      //   .getContractsByIndex(this.props.index)
+      //   .call();
+      console.log(contract);
       let currentBinaryContract = await new web3.eth.Contract(
         JSON.parse(this.props.compiledBinaryContract.interface),
         contract
       );
+      console.log(currentBinaryContract);
       let currentDebtOfCurrentBinaryContract = await currentBinaryContract.methods
         .getCurrentDebt()
         .call();
-
+      let creditor = await currentBinaryContract.methods
+        .getCurrentCreditorAddress()
+        .call();
+      console.log(creditor);
+      console.log(currentDebtOfCurrentBinaryContract);
+      let name = await this.getNameFromAddress(
+        currentDebtOfCurrentBinaryContract.creditor
+      );
       let accountsOfTransaction = [this.props.destination, this.props.source];
 
+      console.log(
+        `debtor: ${currentDebtOfCurrentBinaryContract.debtor},creditor: ${currentDebtOfCurrentBinaryContract.creditor} ${name}`
+      );
       if (
         accountsOfTransaction.includes(
           String(currentDebtOfCurrentBinaryContract.debtor)
@@ -130,38 +146,54 @@ export class DebtRequest extends Component {
       ? await this.props.profile.methods.getZeroAddress().call()
       : deployedContractAddress;
 
-    makeBatchRequest([
-      // remove both of the exchanges in a batch request.
+    // remove both of the exchanges in a batch request.
 
-      // We call this method in order to remove our exchange on the profile (solidity)
-      // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
-      this.props.profile.methods.confirmDebtRequest(this.props.index).send,
-
-      // We call this method in order to remove friend's exchange (solidity method)
-      // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
-      friendsProfile.methods.confirmDebtRequestNotRestricted(
-        friendsExchangeIndex,
-        newContractAddress
-      ).send,
-    ]);
-    function makeBatchRequest(calls) {
-      let batch = new web3.BatchRequest();
-
-      // let promises = calls.map(call => {
-      calls.map((call) => {
-        return new Promise((res, rej) => {
-          let req = call.request(
-            { from: accounts[0], gas: "2000000" },
-            (err, data) => {
-              if (err) rej(err);
-              else res(data);
-            }
-          );
-          batch.add(req);
-        });
+    // We call this method in order to remove our exchange on the profile (solidity)
+    // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
+    this.props.profile.methods.confirmDebtRequest(this.props.index).send({
+      from: accounts[0],
+      gas: "2000000",
+    });
+    // We call this method in order to remove friend's exchange (solidity method)
+    // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
+    friendsProfile.methods
+      .confirmDebtRequestNotRestricted(friendsExchangeIndex, newContractAddress)
+      .send({
+        from: accounts[0],
+        gas: "2000000",
       });
-      batch.execute();
-    }
+    //   makeBatchRequest([
+    //     // remove both of the exchanges in a batch request.
+
+    //     // We call this method in order to remove our exchange on the profile (solidity)
+    //     // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
+    //     this.props.profile.methods.confirmDebtRequest(this.props.index).send,
+
+    //     // We call this method in order to remove friend's exchange (solidity method)
+    //     // TODO: when implementing it with the actual frontend, we should send the actual index instead of "0"
+    //     friendsProfile.methods.confirmDebtRequestNotRestricted(
+    //       friendsExchangeIndex,
+    //       newContractAddress
+    //     ).send,
+    //   ]);
+    // function makeBatchRequest(calls) {
+    //   let batch = new web3.BatchRequest();
+
+    //   // let promises = calls.map(call => {
+    //   calls.map((call) => {
+    //     return new Promise((res, rej) => {
+    //       let req = call.request(
+    //         { from: accounts[0], gas: "2000000" },
+    //         (err, data) => {
+    //           if (err) rej(err);
+    //           else res(data);
+    //         }
+    //       );
+    //       batch.add(req);
+    //     });
+    //   });
+    //   batch.execute();
+    // }
   };
 
   getNameFromAddress = async () => {
@@ -202,37 +234,47 @@ export class DebtRequest extends Component {
           .call();
         if (
           exchange.exchangePurpose === this.props.exchange.exchangePurpose &&
-          exchange.transaction.date === this.props.exchange.transaction.date
+          exchange.transaction.from === this.props.exchange.transaction.from &&
+          exchange.transaction.to === this.props.exchange.transaction.to
         ) {
           friendsExchangeIndex = friendsIndex;
         }
       }
+      console.log(`friend: ${friendsExchangeIndex}, mine: ${this.props.index}`);
 
+      friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
+        from: accounts[0],
+        gas: "2000000",
+      });
+      this.props.profile.methods.removeExchange(this.props.index).send({
+        from: accounts[0],
+        gas: "2000000",
+      });
       // BATCH
       // if (friendsExchangeIndex !== -1) {
-      makeBatchRequest([
-        // remove both of the exchanges in a batch request.
-        friendsProfile.methods.removeExchange(friendsExchangeIndex).send,
-        this.props.profile.methods.removeExchange(this.props.index).send,
-      ]);
-      // }
-      function makeBatchRequest(calls) {
-        let batch = new web3.BatchRequest();
+      //   makeBatchRequest([
+      //     // remove both of the exchanges in a batch request.
+      //     friendsProfile.methods.removeExchange(friendsExchangeIndex).send,
+      //     this.props.profile.methods.removeExchange(this.props.index).send,
+      //   ]);
+      //   // }
+      //   function makeBatchRequest(calls) {
+      //     let batch = new web3.BatchRequest();
 
-        calls.map((call) => {
-          return new Promise((res, rej) => {
-            let req = call.request(
-              { from: accounts[0], gas: "2000000" },
-              (err, data) => {
-                if (err) rej(err);
-                else res(data);
-              }
-            );
-            batch.add(req);
-          });
-        });
-        batch.execute();
-      }
+      //     calls.map((call) => {
+      //       return new Promise((res, rej) => {
+      //         let req = call.request(
+      //           { from: accounts[0], gas: "2000000" },
+      //           (err, data) => {
+      //             if (err) rej(err);
+      //             else res(data);
+      //           }
+      //         );
+      //         batch.add(req);
+      //       });
+      //     });
+      //     batch.execute();
+      //   }
     }
   };
 
