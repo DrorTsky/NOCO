@@ -136,11 +136,11 @@ export class FriendRequest extends Component {
         }
       }
 
-      friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
+      await friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
         from: accounts[0],
         gas: "2000000",
       });
-      this.props.profile.methods.removeExchange(this.props.index).send({
+      await this.props.profile.methods.removeExchange(this.props.index).send({
         from: accounts[0],
         gas: "2000000",
       });

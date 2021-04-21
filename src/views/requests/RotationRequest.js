@@ -375,7 +375,7 @@ export class RotationRequest extends Component {
           }
         }
 
-        friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
+        await friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
           from: accounts[0],
           gas: "3000000",
         });
@@ -384,7 +384,7 @@ export class RotationRequest extends Component {
         //   friendsProfile.methods.removeExchange(friendsExchangeIndex).send
         // );
       }
-      this.props.profile.methods.removeExchange(this.props.index).send({
+      await this.props.profile.methods.removeExchange(this.props.index).send({
         from: accounts[0],
         gas: "3000000",
       });

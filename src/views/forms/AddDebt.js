@@ -52,7 +52,7 @@ export class AddDebt extends Component {
       this.props.friendAddress
     );
 
-    this.props.profile.methods
+    await this.props.profile.methods
       .addDebtRequest(
         this.props.friendAddress,
         this.props.playerOne,
@@ -64,7 +64,7 @@ export class AddDebt extends Component {
         gas: "1000000",
       });
 
-    friendsProfile.methods
+    await friendsProfile.methods
       .addDebtRequestNotRestricted(
         this.props.playerOne,
         this.props.playerOne,

@@ -112,13 +112,13 @@ export class AddFriend extends Component {
     console.log(`friends name: ${friendsName}`);
     console.log(`my name: ${this.props.name}`);
 
-    this.state.profile.methods
+    await this.state.profile.methods
       .addFriendRequest(friendsAddress, friendsName)
       .send({
         from: accounts[0],
         gas: "1000000",
       });
-    friendsProfile.methods
+    await friendsProfile.methods
       .addFriendRequestNotRestricted(this.state.address, this.props.name)
       .send({
         from: accounts[0],
