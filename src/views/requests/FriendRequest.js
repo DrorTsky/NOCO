@@ -50,18 +50,24 @@ export class FriendRequest extends Component {
       }
     }
 
-    this.props.profile.methods
+    await this.props.profile.methods
       .confirmFriendRequest(this.props.index, this.props.sourceName)
       .send({
         from: accounts[0],
         gas: "1000000",
       });
-    // friendsProfile.methods
-    //   .confirmFriendRequestNotRestricted(friendRequestIndex)
-    //   .send({
-    //     from: accounts[0],
-    //     gas: "1000000",
-    //   });
+    // await this.friendsProfileRequest(
+    //   friendsProfile,
+    //   accounts,
+    //   friendRequestIndex
+    // );
+    await friendsProfile.methods
+      .confirmFriendRequestNotRestricted(friendRequestIndex)
+      .send({
+        from: accounts[0],
+        gas: "1000000",
+      });
+
     // makeBatchRequest([
     //   // add both of the exchanges in a batch request.
 
@@ -92,6 +98,11 @@ export class FriendRequest extends Component {
     //   batch.execute();
     // }
   }
+  // friendsProfileRequest = async (
+  //   friendsProfile,
+  //   accounts,
+  //   friendRequestIndex
+  // ) => {};
 
   declineFriendRequest = async (event) => {
     event.preventDefault();
