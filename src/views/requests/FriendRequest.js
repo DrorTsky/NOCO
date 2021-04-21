@@ -56,12 +56,12 @@ export class FriendRequest extends Component {
         from: accounts[0],
         gas: "1000000",
       });
-    friendsProfile.methods
-      .confirmFriendRequestNotRestricted(friendRequestIndex)
-      .send({
-        from: accounts[0],
-        gas: "1000000",
-      });
+    // friendsProfile.methods
+    //   .confirmFriendRequestNotRestricted(friendRequestIndex)
+    //   .send({
+    //     from: accounts[0],
+    //     gas: "1000000",
+    //   });
     // makeBatchRequest([
     //   // add both of the exchanges in a batch request.
 
