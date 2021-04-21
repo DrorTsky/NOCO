@@ -242,39 +242,14 @@ export class DebtRequest extends Component {
       }
       console.log(`friend: ${friendsExchangeIndex}, mine: ${this.props.index}`);
 
-      friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
+      await friendsProfile.methods.removeExchange(friendsExchangeIndex).send({
         from: accounts[0],
         gas: "2000000",
       });
-      this.props.profile.methods.removeExchange(this.props.index).send({
+      await this.props.profile.methods.removeExchange(this.props.index).send({
         from: accounts[0],
         gas: "2000000",
       });
-      // BATCH
-      // if (friendsExchangeIndex !== -1) {
-      //   makeBatchRequest([
-      //     // remove both of the exchanges in a batch request.
-      //     friendsProfile.methods.removeExchange(friendsExchangeIndex).send,
-      //     this.props.profile.methods.removeExchange(this.props.index).send,
-      //   ]);
-      //   // }
-      //   function makeBatchRequest(calls) {
-      //     let batch = new web3.BatchRequest();
-
-      //     calls.map((call) => {
-      //       return new Promise((res, rej) => {
-      //         let req = call.request(
-      //           { from: accounts[0], gas: "2000000" },
-      //           (err, data) => {
-      //             if (err) rej(err);
-      //             else res(data);
-      //           }
-      //         );
-      //         batch.add(req);
-      //       });
-      //     });
-      //     batch.execute();
-      //   }
     }
   };
 
