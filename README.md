@@ -26,6 +26,8 @@
 <img src="/github_images/add_debt_img.jpeg" alt="add_debt" width="200" height="400"/>
 <img src="/github_images/rotation_pick_img.jpeg" alt="rotation" width="200" height="400"/>
 <img src="/github_images/rotation_amount_img.jpeg" alt="rotation_amount" width="200" height="400"/>
+<img src="/github_images/rotation_request.jpeg" alt="rotation_request" width="200" height="400"/>
+  
   </p>
 
 ## Prerequisites
