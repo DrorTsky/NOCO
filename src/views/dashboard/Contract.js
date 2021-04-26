@@ -90,7 +90,7 @@ export class Contract extends Component {
       cardTextStyle = "text-center red_text";
       message = (
         <CCardHeader>
-          <b>you owe</b> {headerName}
+          <b>You owe</b> {headerName}
         </CCardHeader>
       );
     } else {

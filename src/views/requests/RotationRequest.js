@@ -510,18 +510,6 @@ export class RotationRequest extends Component {
       }
     }
 
-    // let t = new Date(parseInt(this.props.creationDate) * 1000);
-    // // let date = t.format("dd.mm.yyyy hh:MM:ss");
-    // let date =
-    //   t.getDate() +
-    //   "/" +
-    //   t.getMonth() +
-    //   "/" +
-    //   t.getFullYear() +
-    //   " " +
-    //   t.getHours() +
-    //   ":" +
-    //   t.getMinutes();
     let date = convertUnixTimeStamp(this.props.creationDate);
 
     return (

@@ -260,7 +260,7 @@ export class DebtRequest extends Component {
     let topMessage = "";
     const buttons = [];
     if (this.props.playerOne === this.props.source) {
-      topMessage = "pending...";
+      topMessage = "Pending...";
       bodyMessage =
         "you sent " + this.state.friendsName + " " + this.props.amount;
       buttons.push(
@@ -276,7 +276,7 @@ export class DebtRequest extends Component {
         </div>
       );
     } else {
-      topMessage = "from: " + this.state.friendsName;
+      topMessage = "From: " + this.state.friendsName;
       bodyMessage = this.state.friendsName + " payed you: " + this.props.amount;
       buttons.push(
         <div>

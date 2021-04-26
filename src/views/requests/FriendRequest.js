@@ -115,8 +115,8 @@ export class FriendRequest extends Component {
     let topMessage = "";
     const buttons = [];
     if (this.props.playerOne === this.props.source) {
-      topMessage = "pending...";
-      bodyMessage = "waiting for " + this.props.destinationName + " to accept";
+      topMessage = "Pending...";
+      bodyMessage = "Waiting for " + this.props.destinationName + " to accept";
       buttons.push(
         <div>
           <CButton
@@ -130,7 +130,7 @@ export class FriendRequest extends Component {
         </div>
       );
     } else {
-      topMessage = "from: " + this.props.destinationName;
+      topMessage = "From: " + this.props.destinationName;
       bodyMessage = this.props.destinationName + " sent you a friend request";
       buttons.push(
         <div>
