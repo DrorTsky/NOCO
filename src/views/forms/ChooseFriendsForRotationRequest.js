@@ -212,6 +212,9 @@ export class ChooseFriendsForRotationRequest extends Component {
     return (
       <div>
         <CCard>
+          <CCardHeader style={{ textAlign: "center", fontWeight: "bold" }}>
+            Choose friends for debt rotation
+          </CCardHeader>
           <CCardBody>
             <CRow>
               <CCol xs="6" xl="6" className="card_width scrollable max_height">
