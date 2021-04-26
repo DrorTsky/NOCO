@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { CListGroupItem } from "@coreui/react";
+import { convertUnixTimeStamp } from "../../functions";
 
 export class Transaction extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ export class Transaction extends Component {
   }
 
   render() {
-    // console.log(this);
+    console.log(this);
     let typeOfCard, message;
     if (this.props.to === this.props.myAddress) {
       typeOfCard = "success";
@@ -20,11 +21,11 @@ export class Transaction extends Component {
       message = `${this.props.amount} || From: ${this.props.friendsName}, To:
           ${this.props.myName}`;
     }
-
+    let date = convertUnixTimeStamp(this.props.date);
     return (
       <div>
         <CListGroupItem accent={typeOfCard} color={typeOfCard}>
-          {message}
+          {message} {date}
         </CListGroupItem>
       </div>
     );

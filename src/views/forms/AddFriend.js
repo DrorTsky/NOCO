@@ -70,21 +70,24 @@ export class AddFriend extends Component {
   addFriendFormSubmit = async (event) => {
     event.preventDefault();
     console.log("in addFriendFormSubmit");
-    if (this.state.allFriends.length !== 0) {
-      for (const [index, value] of Object.entries(this.state.allFriends)) {
-        console.log(value);
-        if (
-          value.friendAddress !== this.state.friendsAddress ||
-          this.state.allFriends.length === 0
-        ) {
-          this.addFriend();
-        } else {
-          console.log("friend exists");
-          break;
+    const friend = await this.props.getFriendFromPhoneNumber(
+      this.state.phoneNumber
+    );
+    if (friend !== -1) {
+      const friendsAddress = friend.contractAddress;
+      let isFriendExists = false;
+      if (this.state.allFriends.length !== 0) {
+        for (const [index, value] of Object.entries(this.state.allFriends)) {
+          if (value.friendAddress === friendsAddress) {
+            console.log("friend exists");
+            isFriendExists = true;
+            break;
+          }
         }
+        if (!isFriendExists) this.addFriend();
+      } else {
+        this.addFriend();
       }
-    } else {
-      this.addFriend();
     }
   };
 
@@ -94,7 +97,7 @@ export class AddFriend extends Component {
     const friend = await this.props.getFriendFromPhoneNumber(
       this.state.phoneNumber
     );
-    console.log(friend);
+    // console.log(friend);
     const friendsAddress = friend.contractAddress;
     // const friendsAddress = await this.props.getAddressFromPhoneNumber(
     //   this.state.phoneNumber
@@ -105,12 +108,12 @@ export class AddFriend extends Component {
     // Getting a reference to a friendsProfile - NOTE: it will work only if the user provided us friendsProfile address
     const friendsProfile = new web3.eth.Contract(profileAbi, friendsAddress);
 
-    console.log(friendsProfile);
+    // console.log(friendsProfile);
 
     // NOTE: that's how I convert between a batch request and 2 seperate "send" requests:
     const friendsName = friend.username;
-    console.log(`friends name: ${friendsName}`);
-    console.log(`my name: ${this.props.name}`);
+    // console.log(`friends name: ${friendsName}`);
+    // console.log(`my name: ${this.props.name}`);
 
     await this.state.profile.methods
       .addFriendRequest(friendsAddress, friendsName)

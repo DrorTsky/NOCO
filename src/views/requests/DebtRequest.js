@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { CButton, CCard, CCardBody, CCardHeader } from "@coreui/react";
 import web3 from "../../web3.js";
 import profileAbi from "../../profile";
+import { convertUnixTimeStamp } from "../../functions";
 
 export class DebtRequest extends Component {
   constructor(props) {
@@ -298,6 +299,7 @@ export class DebtRequest extends Component {
         </div>
       );
     }
+    const date = convertUnixTimeStamp(this.props.creationDate);
     return (
       <div>
         <CCard color="info" className="text-white text-center">
@@ -307,7 +309,7 @@ export class DebtRequest extends Component {
               <h3>
                 {bodyMessage} <br />
               </h3>
-              {this.props.creationDate}
+              {date}
             </blockquote>
 
             <footer className="footer_contract_list_element">

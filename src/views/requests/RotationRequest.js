@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import web3 from "../../web3.js";
 import profileAbi from "../../profile";
+import { convertUnixTimeStamp } from "../../functions";
 
 import {
   CCard,
@@ -508,6 +509,21 @@ export class RotationRequest extends Component {
         );
       }
     }
+
+    // let t = new Date(parseInt(this.props.creationDate) * 1000);
+    // // let date = t.format("dd.mm.yyyy hh:MM:ss");
+    // let date =
+    //   t.getDate() +
+    //   "/" +
+    //   t.getMonth() +
+    //   "/" +
+    //   t.getFullYear() +
+    //   " " +
+    //   t.getHours() +
+    //   ":" +
+    //   t.getMinutes();
+    let date = convertUnixTimeStamp(this.props.creationDate);
+
     return (
       <div>
         <CCard color="info" className="text-white text-center">
@@ -519,7 +535,8 @@ export class RotationRequest extends Component {
               </h6>
               <br />
               <h3>for: {this.props.exchange.debtRotation.amount}</h3>
-              {this.props.creationDate}
+              {date}
+              {/* {this.props.creationDate} */}
             </blockquote>
             <CCard style={{ marginBottom: "10px", height: "50px" }}>
               <CCardBody style={{ padding: "8px" }}>
