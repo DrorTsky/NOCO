@@ -30,6 +30,7 @@ export class AddFriend extends Component {
       playerOne: this.props.playerOne,
       address: this.props.playerOne,
       phoneNumber: "",
+      isFriendExistsMessage: "",
       profile: this.props.profile,
       friendsList: [],
       // friend: [],
@@ -73,13 +74,18 @@ export class AddFriend extends Component {
     const friend = await this.props.getFriendFromPhoneNumber(
       this.state.phoneNumber
     );
+    this.setState({
+      isFriendExistsMessage: "",
+    });
     if (friend !== -1) {
       const friendsAddress = friend.contractAddress;
       let isFriendExists = false;
       if (this.state.allFriends.length !== 0) {
         for (const [index, value] of Object.entries(this.state.allFriends)) {
           if (value.friendAddress === friendsAddress) {
-            console.log("friend exists");
+            this.setState({
+              isFriendExistsMessage: "already a friend",
+            });
             isFriendExists = true;
             break;
           }
@@ -88,6 +94,10 @@ export class AddFriend extends Component {
       } else {
         this.addFriend();
       }
+    } else {
+      this.setState({
+        isFriendExistsMessage: "user not found",
+      });
     }
   };
 
@@ -199,6 +209,7 @@ export class AddFriend extends Component {
                   </CInputGroup>
                 </CCol>
               </CFormGroup>
+              <h6>{this.state.isFriendExistsMessage}</h6>
             </CCardBody>
             <CCardFooter className="footer_contract_list_element align_center">
               <CButton
