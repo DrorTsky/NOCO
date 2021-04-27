@@ -79,7 +79,7 @@ export class Contract extends Component {
   };
 
   render() {
-    // console.log(this);
+    console.log(this);
     let headerName =
       this.state.myName === this.state.creditor
         ? this.props.myName

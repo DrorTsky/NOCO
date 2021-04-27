@@ -16,9 +16,7 @@ import {
 
 //MATERIAL-UI
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 import AmountToRotateRotationDialog from "./AmountToRotateRotationDialog.js";
 
 // since in order to have contract you need you have the other participant
@@ -167,7 +165,7 @@ export class ChooseFriendsForRotationRequest extends Component {
   };
 
   render() {
-    // console.log(this);
+    console.log(this);
 
     const peopleOweToUser = [];
     const peopleUserOwesTo = [];
@@ -272,6 +270,9 @@ export class ChooseFriendsForRotationRequest extends Component {
                   mediatorAddress={this.props.address}
                   profile={this.props.profile}
                   handleClose={this.handleCloseRotationSelectAmount}
+                  setStateAndAmountOfExchanges={
+                    this.props.setStateAndAmountOfExchanges
+                  }
                 />
               </DialogContent>
             </Dialog>

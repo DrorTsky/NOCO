@@ -190,6 +190,7 @@ export class TheLayout extends Component {
               getAddressFromPhoneNumber={this.getAddressFromPhoneNumber}
               getFriendFromPhoneNumber={this.getFriendFromPhoneNumber}
               setStateAndAmountOfExchanges={this.setStateAndAmountOfExchanges}
+              totalRequests={this.state.totalRequests}
             />
           </div>
           <TheFooter isLoggedInCheck={this.isLoggedInCheck} />

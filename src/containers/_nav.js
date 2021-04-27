@@ -1,10 +1,6 @@
 import React from "react";
 import CIcon from "@coreui/icons-react";
 
-const printme = () => {
-  console.log("in _nav");
-};
-
 const _nav = [
   {
     _tag: "CSidebarNavItem",

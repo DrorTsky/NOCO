@@ -6,7 +6,6 @@ import {
   CDropdownMenu,
   CDropdownToggle,
   CLink,
-  CProgress,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 
@@ -33,7 +32,7 @@ export class TheHeaderDropdownNotif extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.totalRequests != prevProps.totalRequests) {
+    if (this.props.totalRequests !== prevProps.totalRequests) {
       // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
       this.setTotalRequests();
     }
@@ -133,6 +132,7 @@ export class TheHeaderDropdownNotif extends Component {
                 pathname: "/friend_requests",
                 requestProps: {
                   compiledBinaryContract: this.props.compiledBinaryContract,
+                  totalRequests: this.props.totalRequests,
                 },
               }}
               className="text-success"
@@ -150,6 +150,7 @@ export class TheHeaderDropdownNotif extends Component {
                 pathname: "/debt_requests",
                 requestProps: {
                   compiledBinaryContract: this.props.compiledBinaryContract,
+                  totalRequests: this.props.totalRequests,
                 },
               }}
               className="text-info"
@@ -167,6 +168,7 @@ export class TheHeaderDropdownNotif extends Component {
                 pathname: "/rotation_requests",
                 requestProps: {
                   compiledBinaryContract: this.props.compiledBinaryContract,
+                  totalRequests: this.props.totalRequests,
                 },
               }}
               className="text-primary"

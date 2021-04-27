@@ -10,6 +10,7 @@ export class DebtRequest extends Component {
 
     this.state = {
       friendsName: "",
+      exchange: this.props.exchange,
     };
     this.confirmDebtRequest = this.confirmDebtRequest.bind(this);
     this.declineDebtRequest = this.declineDebtRequest.bind(this);
@@ -163,6 +164,9 @@ export class DebtRequest extends Component {
         from: accounts[0],
         gas: "2000000",
       });
+
+    await this.props.setStateAndAmountOfExchanges();
+    this.forceUpdate();
     //   makeBatchRequest([
     //     // remove both of the exchanges in a batch request.
 
@@ -251,6 +255,9 @@ export class DebtRequest extends Component {
         from: accounts[0],
         gas: "2000000",
       });
+
+      await this.props.setStateAndAmountOfExchanges();
+      this.forceUpdate();
     }
   };
 

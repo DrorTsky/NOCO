@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddFriend from "../views/forms/AddFriend";
-import AddDebt from "../views/forms/AddDebt";
-import ChooseFriendForDebtRequest from "src/views/forms/ChooseFriendForDebtRequest";
+
 // CORE-UI
 import {
   CHeader,

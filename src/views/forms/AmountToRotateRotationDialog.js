@@ -109,6 +109,7 @@ export class AmountToRotateRotationDialog extends Component {
         0
       )
       .send({ from: accounts[0], gas: "1000000" });
+    await this.props.setStateAndAmountOfExchanges();
   };
 
   // *****************************************************

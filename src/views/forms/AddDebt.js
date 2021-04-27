@@ -75,43 +75,7 @@ export class AddDebt extends Component {
         from: accounts[0],
         gas: "1000000",
       });
-
-    // makeBatchRequest([
-    //   // add both of the exchanges in a batch request.
-    //   // the difference: addDebtRequest(destination, same other args), addDebtRequestNotRestricted(source, same other args)
-    //   this.props.profile.methods.addDebtRequest(
-    //     this.props.friendAddress,
-    //     this.props.playerOne,
-    //     this.state.providedAmount,
-    //     this.props.friendAddress
-    //   ).send,
-    //   friendsProfile.methods.addDebtRequestNotRestricted(
-    //     this.props.playerOne,
-    //     this.props.playerOne,
-    //     this.state.providedAmount,
-    //     this.props.friendAddress
-    //   ).send,
-    // ]);
-
-    // function makeBatchRequest(calls) {
-    //   let batch = new web3.BatchRequest();
-
-    //   // let promises = calls.map(call => {
-    //   calls.map((call) => {
-    //     return new Promise((res, rej) => {
-    //       let req = call.request(
-    //         { from: accounts[0], gas: "1000000" },
-    //         (err, data) => {
-    //           if (err) rej(err);
-    //           else res(data);
-    //         }
-    //       );
-    //       batch.add(req);
-    //     });
-    //   });
-    //   batch.execute();
-    // }
-
+    await this.props.setStateAndAmountOfExchanges();
     this.props.handleClose();
   };
 
@@ -128,7 +92,7 @@ export class AddDebt extends Component {
     this.setState({ [name]: value });
   }
   render() {
-    // console.log(this);
+    console.log(this);
     return (
       <div>
         <CCard>

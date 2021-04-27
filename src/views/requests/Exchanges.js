@@ -36,6 +36,13 @@ export class Exchanges extends Component {
     }
   };
 
+  async componentDidUpdate(prevProps) {
+    if (this.props.totalRequests !== prevProps.totalRequests) {
+      console.log("updating");
+      await this.setStateAndAmountOfExchanges();
+    }
+  }
+
   async componentDidMount() {
     if (
       (await this.state.profile.methods.getAllExchanges().call())[0] !==
@@ -48,6 +55,10 @@ export class Exchanges extends Component {
         )[0].transaction)
       ).then(this.setStateAndAmountOfExchanges());
     }
+  }
+
+  async componentDidUpdate() {
+    await this.props.setStateAndAmountOfExchanges();
   }
 
   render() {
@@ -75,6 +86,7 @@ export class Exchanges extends Component {
               setStateAndAmountOfExchanges={
                 this.props.setStateAndAmountOfExchanges
               }
+              totalRequests={this.props.totalRequests}
             />
           );
         }

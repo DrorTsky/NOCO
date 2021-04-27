@@ -7,14 +7,12 @@ import {
   CCardFooter,
   CCardHeader,
   CCol,
-  CRow,
   CForm,
   CFormGroup,
   CInput,
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CInputGroupAppend,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 
@@ -137,33 +135,7 @@ export class AddFriend extends Component {
         from: accounts[0],
         gas: "1000000",
       });
-    //     makeBatchRequest([
-    //       // add both of the exchanges in a batch request.
-    //       this.state.profile.methods.addFriendRequest(
-    //         friendsAddress,
-    //         friendsName
-    //       ).send,
-    //       friendsProfile.methods.addFriendRequestNotRestricted(
-    //         this.state.address,
-    //         this.props.name
-    //       ).send,
-    //     ]);
-    // function makeBatchRequest(calls) {
-    //   let batch = new web3.BatchRequest();
-    //   calls.map((call) => {
-    //     return new Promise((res, rej) => {
-    //       let req = call.request(
-    //         { from: accounts[0], gas: "1000000" },
-    //         (err, data) => {
-    //           if (err) rej(err);
-    //           else res(data);
-    //         }
-    //       );
-    //       batch.add(req);
-    //     });
-    //   });
-    //   batch.execute();
-    // }
+    await this.props.setStateAndAmountOfExchanges();
   };
 
   // *****************************************************
@@ -179,7 +151,7 @@ export class AddFriend extends Component {
   }
 
   render() {
-    // console.log(this);
+    console.log(this);
     return (
       <div>
         <CCard>

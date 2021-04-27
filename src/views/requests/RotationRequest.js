@@ -39,6 +39,7 @@ export class RotationRequest extends Component {
       mediatorName: "",
       creditorName: "",
       debtorName: "",
+      exchange: this.props.exchange,
     };
     this.findParticipantsExchangeIndex = this.findParticipantsExchangeIndex.bind(
       this
@@ -257,6 +258,8 @@ export class RotationRequest extends Component {
         from: accounts[0],
         gas: "2000000",
       });
+    await this.props.setStateAndAmountOfExchanges();
+    this.forceUpdate();
   };
   //********************************************************
   // ROTATION NON MEDIATOR PARTICIPANTS
@@ -336,6 +339,9 @@ export class RotationRequest extends Component {
       otherParticipantsIndex,
       accounts
     ); //third and final participant
+
+    await this.props.setStateAndAmountOfExchanges();
+    this.forceUpdate();
   };
 
   declineRotationRequest = async (event) => {
@@ -389,31 +395,34 @@ export class RotationRequest extends Component {
         from: accounts[0],
         gas: "3000000",
       });
+
+      await this.props.setStateAndAmountOfExchanges();
+      this.forceUpdate();
       // forBatchRequests.push(
       //   this.props.profile.methods.removeExchange(this.props.index).send
       // );
 
       // BATCH
       // if (friendsExchangeIndex !== -1) {
-      makeBatchRequest(forBatchRequests);
-      // }
-      function makeBatchRequest(calls) {
-        let batch = new web3.BatchRequest();
+      // makeBatchRequest(forBatchRequests);
+      // // }
+      // function makeBatchRequest(calls) {
+      //   let batch = new web3.BatchRequest();
 
-        calls.map((call) => {
-          return new Promise((res, rej) => {
-            let req = call.request(
-              { from: accounts[0], gas: "3000000" },
-              (err, data) => {
-                if (err) rej(err);
-                else res(data);
-              }
-            );
-            batch.add(req);
-          });
-        });
-        batch.execute();
-      }
+      //   calls.map((call) => {
+      //     return new Promise((res, rej) => {
+      //       let req = call.request(
+      //         { from: accounts[0], gas: "3000000" },
+      //         (err, data) => {
+      //           if (err) rej(err);
+      //           else res(data);
+      //         }
+      //       );
+      //       batch.add(req);
+      //     });
+      //   });
+      //   batch.execute();
+      // }
     });
     // for (let address in addresses) {
 

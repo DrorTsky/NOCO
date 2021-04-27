@@ -12,7 +12,7 @@ export class ExchangeRequest extends Component {
   }
 
   render() {
-    // console.log(this);
+    console.log(this);
     const exchanges = [];
     var { amount, ...friendProps } = this.props;
     if (this.props.exchangePurpose === "1") {

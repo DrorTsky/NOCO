@@ -8,11 +8,19 @@ export class FriendRequest extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      exchange: this.props.exchange,
+      totalRequests: this.props.totalRequests,
+    };
     this.confirmFriendRequest = this.confirmFriendRequest.bind(this);
     this.declineFriendRequest = this.declineFriendRequest.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.totalRequests !== prevProps.totalRequests) {
+      this.forceUpdate();
+    }
+  }
   async confirmFriendRequest(event) {
     event.preventDefault();
 
@@ -64,6 +72,9 @@ export class FriendRequest extends Component {
         from: accounts[0],
         gas: "1000000",
       });
+
+    await this.props.setStateAndAmountOfExchanges();
+    this.forceUpdate();
   }
 
   declineFriendRequest = async (event) => {
@@ -94,7 +105,7 @@ export class FriendRequest extends Component {
           exchange.transaction.date === this.props.exchange.transaction.date
         ) {
           friendsExchangeIndex = friendsIndex;
-          console.log(exchange);
+          // console.log(exchange);
         }
       }
 
@@ -106,6 +117,8 @@ export class FriendRequest extends Component {
         from: accounts[0],
         gas: "2000000",
       });
+      await this.props.setStateAndAmountOfExchanges();
+      this.forceUpdate();
     }
   };
 

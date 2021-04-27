@@ -53,6 +53,7 @@ export class ChooseFriendForDebtRequest extends Component {
   };
 
   render() {
+    console.log(this);
     const friends = [];
     const amountOfFriends = this.state.friendsList.length;
     // console.log(this.state.allFriends);
@@ -66,6 +67,7 @@ export class ChooseFriendForDebtRequest extends Component {
           playerOne={this.props.playerOne}
           friendAddress={value.friendAddress}
           profile={this.props.profile}
+          setStateAndAmountOfExchanges={this.props.setStateAndAmountOfExchanges}
         />
       );
     }
