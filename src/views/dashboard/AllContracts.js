@@ -77,7 +77,7 @@ export class AllContracts extends Component {
   }
 
   render() {
-    // console.log(this);
+    console.log(this);
     const items = [];
     for (const [index, value] of Object.entries(this.state.listInformation)) {
       items.push(

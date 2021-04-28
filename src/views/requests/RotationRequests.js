@@ -9,7 +9,7 @@ export class RotationRequests extends Component {
   }
 
   render() {
-    // console.log(this);
+    console.log(this);
     return (
       <div>
         <Exchanges type="2" profile={this.props.profile} {...this.props} />

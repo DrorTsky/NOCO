@@ -53,6 +53,7 @@ export class RotationRequest extends Component {
   }
 
   async componentDidMount() {
+    console.log("in mount rotation request");
     if (this.props.playerOne === this.props.exchange.debtRotation.mediator) {
       this.setState({ isMediator: true });
     } else if (
@@ -128,6 +129,7 @@ export class RotationRequest extends Component {
   };
 
   mediatorsFinalAccept = async () => {
+    console.log("starting final accept");
     let accounts = await web3.eth.getAccounts();
     // get profiles
     const debtorsProfile = new web3.eth.Contract(
@@ -147,11 +149,15 @@ export class RotationRequest extends Component {
     let creditorsIndex = await this.findParticipantsExchangeIndex(
       this.props.exchange.debtRotation.creditor
     );
-    console.log(
-      `creditors index: ${creditorsIndex} debtors index: ${debtorsIndex}`
-    );
+    // console.log(
+    //   `creditors index: ${creditorsIndex} debtors index: ${debtorsIndex}`
+    // );
     // console.log(`creditors index: ${creditorsIndex}`);
+    //*************************************************************
     // check if debtor has a binary contract with creditor
+    console.log(
+      "checking if a contract between the creditor and debtor exists"
+    );
     let isContract = await this.checkIfContractExists(
       creditorsProfile,
       this.props.exchange.debtRotation.debtor,
@@ -159,7 +165,10 @@ export class RotationRequest extends Component {
     );
     console.log(isContract);
     // if not, create one
+    let isNewContract = false;
+    let creditorDebtorContractAddress = "";
     if (isContract === undefined) {
+      console.log("contracts doesn't exists so create a new one");
       // console.log(`no contract, creating one`);
       // deploy a binaryContract
       await creditorsProfile.methods
@@ -172,17 +181,20 @@ export class RotationRequest extends Component {
           from: accounts[0],
           gas: "4000000",
         });
+      console.log("find the newly created contract");
+      isNewContract = true;
       isContract = await this.checkIfContractExists(
         creditorsProfile,
         this.props.exchange.debtRotation.debtor,
         this.props.exchange.debtRotation.creditor
       );
-      console.log("contract created");
+      // console.log("contract created");
       console.log(isContract);
       // console.log(`created a contract: ${isContract}`);
     } else {
       //transfer debt between creditor and debtor
       console.log(`contract already exists: ${isContract}`);
+      console.log("adding the transaction to the existing contract");
       await isContract.methods
         .addTransaction(
           this.props.exchange.debtRotation.debtor,
@@ -195,13 +207,16 @@ export class RotationRequest extends Component {
         });
       console.log(`transaction added`);
     }
+    //*************************************************************
     //transfer debt between debtor and mediator - debtor transfers to mediator "closing" the debt
+    console.log("find the mediator - debtor contract");
     let debtorMediatorContract = await this.checkIfContractExists(
       debtorsProfile,
       this.props.exchange.debtRotation.mediator,
       this.props.exchange.debtRotation.debtor
     );
     console.log(`mediator - debtor contract: ${debtorMediatorContract}`);
+    console.log("transfer between mediator - debtor");
     await debtorMediatorContract.methods
       .addTransaction(
         this.props.exchange.debtRotation.mediator,
@@ -214,13 +229,16 @@ export class RotationRequest extends Component {
       });
     console.log(`mediator - debtor contract: transferred`);
 
+    //*************************************************************
     // transfer debt between mediator and creditor
+    console.log("find the mediator - creditor contract");
     let mediatorCreditorContract = await this.checkIfContractExists(
       this.props.profile,
       this.props.exchange.debtRotation.creditor,
       this.props.exchange.debtRotation.mediator
     );
     console.log(`mediator - creditor contract: ${mediatorCreditorContract}`);
+    console.log("transfer between mediator - creditor");
     await mediatorCreditorContract.methods
       .addTransaction(
         this.props.exchange.debtRotation.creditor,
@@ -233,6 +251,11 @@ export class RotationRequest extends Component {
       });
     console.log(`mediator - creditor contract: transferred`);
     // console.log(isContract._address);
+    //*************************************************************
+    console.log("remove mediators request");
+    creditorDebtorContractAddress = isNewContract
+      ? await this.props.profile.methods.getZeroAddress().call()
+      : isContract._address;
     //remove rotation exchanges
     await this.props.profile.methods
       .confirmDebtRotationRequest(this.props.index)
@@ -240,6 +263,11 @@ export class RotationRequest extends Component {
         from: accounts[0],
         gas: "2000000",
       });
+    console.log("remove debtors request");
+    // await debtorsProfile.methods.removeExchange(debtorsIndex).send({
+    //   from: accounts[0],
+    //   gas: "2000000",
+    // });
     await debtorsProfile.methods
       .confirmDebtRotationRequestNotRestricted(
         debtorsIndex,
@@ -249,15 +277,22 @@ export class RotationRequest extends Component {
         from: accounts[0],
         gas: "2000000",
       });
-    await creditorsProfile.methods
-      .confirmDebtRotationRequestNotRestricted(
-        creditorsIndex,
-        isContract._address
-      )
-      .send({
-        from: accounts[0],
-        gas: "2000000",
-      });
+    console.log("remove creditors request");
+    await creditorsProfile.methods.removeExchange(creditorsIndex).send({
+      from: accounts[0],
+      gas: "2000000",
+    });
+    // await creditorsProfile.methods
+    //   .confirmDebtRotationRequestNotRestricted(
+    //     creditorsIndex,
+    //     isContract._address
+    //   )
+    //   .send({
+    //     from: accounts[0],
+    //     gas: "2000000",
+    //   });
+    console.log("DONE");
+    //*************************************************************
     await this.props.setStateAndAmountOfExchanges();
     this.forceUpdate();
   };
@@ -437,6 +472,7 @@ export class RotationRequest extends Component {
     //********************************************************
     //PROGRESS STATUS
     //********************************************************
+    console.log(this);
     const progress = [];
     let iconsAmount =
       this.props.exchange.debtRotation.status === "2"
@@ -543,6 +579,13 @@ export class RotationRequest extends Component {
             <footer className="footer_contract_list_element">{buttons}</footer>
           </CCardBody>
         </CCard>
+        {/* <button
+          onClick={() => {
+            console.log("button");
+          }}
+        >
+          click
+        </button> */}
       </div>
     );
   }
